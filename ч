@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Каждому нужен сайт — сайты, чат-боты и автоматизация</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f6fb;--tx:#12141c;--mu:#5b6275;--cd:rgba(255,255,255,.75);--bd:#e2e5ef;--hd:rgba(245,246,251,.85);--ac:#6c5ce7;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0d14;--tx:#eef0f7;--mu:#9aa1b5;--cd:rgba(20,24,38,.75);--bd:#252c40;--hd:rgba(11,13,20,.85);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b0d14;--tx:#eef0f7;--mu:#9aa1b5;--cd:rgba(20,24,38,.75);--bd:#252c40;--hd:rgba(11,13,20,.85);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 Manrope,system-ui,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--hd);z-index:10}
+h1,h2,h3{line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(34px,7vw,64px);font-weight:800}
+h2{font-size:clamp(26px,4.5vw,40px);font-weight:800;text-align:center}
+.mu{color:var(--mu)}.c{text-align:center}
+.g{background:linear-gradient(90deg,var(--ac),#00c2b8);-webkit-background-clip:text;background-clip:text;color:transparent}
+#pg{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--ac),#00c2b8);z-index:20}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--hd);border-bottom:1px solid var(--bd)}
+.lg{font-weight:800;font-size:18px}
+nav{margin-left:auto;display:flex;gap:16px}nav a{color:var(--mu);text-decoration:none;font-weight:600;font-size:14px}
+.sw{width:18px;height:18px;border-radius:50%;border:2px solid var(--bd);cursor:pointer;padding:0}
+.ib{background:var(--cd);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;cursor:pointer;color:var(--tx);font-size:16px}
+#bg{display:none}
+@media(max-width:720px){#bg{display:block}#sws{display:none!important}nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--bd)}nav.open{display:flex}nav a{padding:14px 20px;font-size:16px}.lg{margin-right:auto}.two{grid-template-columns:1fr!important}}
+.w{max-width:1040px;margin:auto;padding:64px 20px}
+.hero{position:relative;isolation:isolate;text-align:center;padding:90px 20px 60px;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;animation:fl 9s ease-in-out infinite alternate;z-index:-1}
+@keyframes fl{to{transform:translate(40px,-30px) scale(1.2)}}
+.cr{display:inline-block;width:3px;height:.85em;background:var(--ac);margin-left:3px;animation:bk 1s steps(2) infinite;vertical-align:-.05em}
+@keyframes bk{50%{opacity:0}}
+.b{background:linear-gradient(135deg,var(--ac),#00c2b8);color:#fff;border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.b2{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:12px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.b:active,.b2:active{transform:scale(.97)}
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:20px}
+.gr{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:28px}
+.gr .cd{transition:.25s}.gr .cd:hover{transform:translateY(-4px);border-color:var(--ac)}
+.ic{font-size:30px}
+.num{font-size:40px;font-weight:800}
+.rv{opacity:0;transform:translateY(24px);transition:.6s}.rv.in{opacity:1;transform:none}
+.tbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin:24px 0 16px}
+.tb{white-space:nowrap;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:999px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+.tb.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.pn[hidden]{display:none}
+#ch{height:310px;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:14px}
+.m{max-width:82%;padding:9px 13px;border-radius:14px;background:var(--bd);animation:pp .25s}
+.m.u{align-self:flex-end;background:var(--ac);color:#fff}
+@keyframes pp{from{opacity:0;transform:scale(.9)}}
+#qk{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+#qk button{border:1px solid var(--ac);background:none;color:var(--ac);border-radius:999px;padding:6px 12px;font:inherit;cursor:pointer}
+#cf{display:flex;gap:8px;padding:10px;border-top:1px solid var(--bd)}
+input[type=text],input[type=tel],select,textarea{flex:1;width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;font:inherit}
+.op{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;cursor:pointer}
+.op span{flex:1}input[type=checkbox]{accent-color:var(--ac);width:18px;height:18px}
+#tot{font-size:34px;font-weight:800}
+.two{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.pc{text-align:center;display:flex;flex-direction:column;gap:6px;padding:14px}.em{font-size:42px}
+.ci{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)}
+.q{width:26px;height:26px;border-radius:8px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);cursor:pointer}
+#qbar{height:6px;background:var(--bd);border-radius:6px;overflow:hidden;margin-bottom:16px}
+#qp{height:100%;width:0;background:var(--ac);transition:width .4s}
+.blk{display:block;width:100%;margin:8px 0;text-align:left}
+.mq{overflow:hidden;white-space:nowrap;border-block:1px solid var(--bd);padding:10px 0;background:var(--cd)}
+.mq div{display:inline-block;animation:mq 30s linear infinite;font-weight:800}
+@keyframes mq{to{transform:translateX(-50%)}}
+.hl{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--bd)}.hl:last-child{border:0}
+#gm{position:relative;height:260px;overflow:hidden;border-radius:14px;background:var(--bg);border:1px dashed var(--bd);margin-top:10px}
+.ld{position:absolute;font-size:34px;border:0;background:none;cursor:pointer;animation:pp .2s}
+#cv{position:fixed;inset:0;pointer-events:none;z-index:40}
+#c3{position:fixed;left:0;right:0;bottom:0;width:100%;height:50vh;z-index:-1;pointer-events:none;opacity:.32;-webkit-mask-image:linear-gradient(transparent,#000 40%);mask-image:linear-gradient(transparent,#000 40%)}
+#spd{position:fixed;left:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:12;pointer-events:none;width:92px;height:92px;color:var(--tx)}
+#gl{position:fixed;left:0;top:0;width:360px;height:360px;border-radius:50%;pointer-events:none;background:radial-gradient(var(--ac),transparent 65%);opacity:.1;will-change:transform;z-index:-1}
+.f label{display:block;font-weight:600}.f input[type=text]{margin-top:6px}.big{font-size:26px;font-weight:800}
+details{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px 18px;margin-top:10px}
+summary{cursor:pointer;font-weight:700}
+#wf,#up{position:fixed;right:16px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:22px;border:0;cursor:pointer;z-index:12;text-decoration:none}
+#wf{bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#25d366;color:#fff}
+#up{bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--cd);border:1px solid var(--bd);color:var(--tx);opacity:0;pointer-events:none;transition:.3s}
+#up.on{opacity:1;pointer-events:auto}
+#ts{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;opacity:0;transition:.3s;z-index:30;font-weight:600}
+#ts.on{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;padding:30px 20px 90px;color:var(--mu);border-top:1px solid var(--bd)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="pg"></div>
+<canvas id="c3" aria-hidden="true"></canvas>
+<div id="spd"><svg viewBox="0 0 100 100" width="92" height="92">
+<circle cx="50" cy="50" r="48" style="fill:var(--cd);stroke:var(--bd);stroke-width:2"/>
+<path d="M21.7 78.3A40 40 0 1 1 78.3 78.3" fill="none" style="stroke:var(--bd);stroke-width:5;stroke-linecap:round"/>
+<path id="pa" d="M21.7 78.3A40 40 0 1 1 78.3 78.3" fill="none" stroke-dasharray="188.5" stroke-dashoffset="188.5" style="stroke:var(--ac);stroke-width:5;stroke-linecap:round"/>
+<g id="tk"></g>
+<line id="nd" x1="50" y1="50" x2="50" y2="24" transform="rotate(-135 50 50)" style="stroke:var(--tx);stroke-width:2.5;stroke-linecap:round"/>
+<circle cx="50" cy="50" r="4" style="fill:var(--ac)"/>
+<text id="kmh" x="50" y="72" text-anchor="middle" font-size="13" font-weight="800" fill="currentColor">0</text>
+<text x="50" y="84" text-anchor="middle" font-size="7" fill="currentColor" opacity=".6">км/ч</text>
+</svg></div>
+<header>
+<span class="lg g">&lt;/&gt; Сайты и боты</span>
+<nav><a href="#why">Зачем сайт</a><a href="#halal">Халяль</a><a href="#srv">Услуги</a><a href="#demo">Демо</a><a href="#work">Работы</a><a href="#contact">Контакты</a></nav>
+<span id="sws" style="display:flex;gap:6px"></span>
+<button class="ib" id="tg" aria-label="Тема">🌓</button><button class="ib" id="b3" aria-label="3D фон" title="3D фон">🏎</button><button class="ib" id="bg" aria-label="Меню">☰</button>
+</header>
+
+<section class="hero">
+<div class="bl" style="width:300px;height:300px;background:#6c5ce7;left:-60px;top:-40px"></div>
+<div class="bl" style="width:260px;height:260px;background:#00c2b8;right:-40px;bottom:-30px"></div>
+<h1>Каждому нужен <span class="g">сайт</span></h1>
+<p style="font-size:clamp(20px,4vw,30px);font-weight:800;margin:0 0 14px">Создаю <span class="g" id="ty"></span><span class="cr"></span></p>
+<p class="mu" style="max-width:560px;margin:0 auto 26px;font-size:18px">Сайты, чат-боты, интернет-магазины и автоматизация бизнеса. Не верьте словам — попробуйте демо прямо здесь.</p>
+<a class="b" href="#demo">Смотреть демо ↓</a> <a class="b2" href="#contact">Обсудить проект</a> <a class="b2" href="tel:+77075269442">📞 Позвонить</a>
+<p class="g" style="font-weight:800;margin:22px 0 0">✅ Только халяль: честно, прозрачно, без обмана</p>
+</section>
+
+<div class="mq"><div id="mqt"></div></div>
+<section class="w" style="padding-top:20px">
+<div class="gr" style="margin:0">
+<div class="cd c rv"><div class="num" data-to="4">0</div><div class="mu">реальных сайта в портфолио</div></div>
+<div class="cd c rv"><div class="num" data-to="24" data-s="/7">0</div><div class="mu">чат-бот отвечает клиентам</div></div>
+<div class="cd c rv"><div class="num" data-to="100" data-s="%">0</div><div class="mu">адаптивно под телефон</div></div>
+</div>
+</section>
+
+<section class="w" id="why">
+<h2>Зачем бизнесу сайт и бот</h2>
+<p class="c mu" style="max-width:660px;margin:0 auto"><b>Сайт нужен каждому бизнесу.</b> Нет сайта — вас не существует для тех, кто ищет вас в интернете. А бот отвечает клиентам вместо вас, пока вы заняты или спите.</p>
+<div class="gr">
+<div class="cd rv"><div class="ic">🌙</div><h3>Работает 24/7</h3><p class="mu">Клиент написал ночью — получил ответ и оставил заявку.</p></div>
+<div class="cd rv"><div class="ic">🔎</div><h3>Вас находят</h3><p class="mu">Через поиск и по ссылке, а не только в соцсетях.</p></div>
+<div class="cd rv"><div class="ic">🤝</div><h3>Доверие</h3><p class="mu">Есть сайт, цены, адрес и контакты — значит, бизнес настоящий.</p></div>
+<div class="cd rv"><div class="ic">📲</div><h3>Заявки сами</h3><p class="mu">Форма, калькулятор и квиз присылают заявку сразу в WhatsApp.</p></div>
+<div class="cd rv"><div class="ic">🏠</div><h3>Это ваше</h3><p class="mu">Сайт принадлежит вам, а аккаунт в соцсети могут ограничить.</p></div>
+<div class="cd rv"><div class="ic">💸</div><h3>Экономия</h3><p class="mu">Бот снимает рутину с менеджера и платится один раз.</p></div>
+</div>
+<div class="cd rv" style="margin-top:28px">
+<h3>💰 Сколько вы сэкономите с ботом</h3>
+<p class="mu">Пример: менеджер, который отвечает на запросы, стоит 200 000 ₸ в месяц. Бот за 200 000 ₸ берёт на себя 70% обращений. Подставьте свои цифры:</p>
+<div class="gr f" style="margin:14px 0">
+<label>Зарплата менеджера в месяц<input type="text" inputmode="numeric" id="r1" value="200000"></label>
+<label>Бот берёт на себя: <b id="r2v">70%</b><input type="range" id="r2" min="10" max="95" value="70" style="width:100%;margin-top:14px;accent-color:var(--ac)"></label>
+<label>Стоимость бота (разово)<input type="text" inputmode="numeric" id="r3" value="200000"></label>
+</div>
+<div class="gr" style="margin:0 0 14px">
+<div class="cd c"><div class="mu">Экономия в месяц</div><div class="big g" id="rm"></div></div>
+<div class="cd c"><div class="mu">Бот окупится за</div><div class="big g" id="rp"></div></div>
+<div class="cd c"><div class="mu">Выгода за первый год</div><div class="big g" id="ry"></div></div>
+</div>
+<p class="mu" style="font-size:14px">Доля 70% — пример для типовых повторяющихся вопросов: цены, сроки, адрес, статус заказа. Сложные случаи остаются за человеком.</p>
+<a class="b" href="#contact">Хочу бота для своего бизнеса</a>
+</div>
+</section>
+
+<section class="w" id="halal">
+<h2>Халяль-подход ✅</h2>
+<p class="c mu" style="max-width:640px;margin:0 auto 18px">Халяль в работе — это честность в каждой мелочи. Вот мои правила:</p>
+<div class="cd rv">
+<div class="hl"><span>✅</span><div><b>Халяль-цена.</b> Называю стоимость заранее: без накруток и скрытых платежей.</div></div>
+<div class="hl"><span>✅</span><div><b>Халяль-договор.</b> Сроки и объём работ фиксируются письменно, слово держу.</div></div>
+<div class="hl"><span>✅</span><div><b>Халяль-тематика.</b> Не делаю сайты и ботов для алкоголя, азартных игр и ставок.</div></div>
+<div class="hl"><span>✅</span><div><b>Халяль-реклама.</b> Без обмана и преувеличений в текстах и обещаниях.</div></div>
+<div class="hl"><span>✅</span><div><b>Халяль-поддержка.</b> Не бросаю проект после оплаты: помогаю с правками и запуском.</div></div>
+</div>
+<p class="c" style="margin-top:18px"><a class="b" href="#demo" onclick="setTimeout(()=>$('[data-t=p7]').click(),50)">Проверить свой проект на халяль →</a></p>
+</section>
+
+<section class="w" id="srv">
+<h2>Что я делаю</h2>
+<div class="gr">
+<div class="cd rv"><div class="ic">🌐</div><h3>Сайты</h3><p class="mu">Лендинги и многостраничники: быстрые, адаптивные, с анимациями.</p></div>
+<div class="cd rv"><div class="ic">🤖</div><h3>Чат-боты</h3><p class="mu">Telegram и WhatsApp: заявки, каталог, рассылки, ИИ-ответы.</p></div>
+<div class="cd rv"><div class="ic">🛒</div><h3>Магазины</h3><p class="mu">Каталог, корзина, заказ в мессенджер или онлайн-оплата.</p></div>
+<div class="cd rv"><div class="ic">⚙️</div><h3>Автоматизация</h3><p class="mu">Интеграции, таблицы, уведомления: меньше рутины.</p></div>
+</div>
+</section>
+
+<section class="w" id="demo">
+<h2>Живые демо</h2>
+<p class="c mu">Всё ниже работает по-настоящему. Нажимайте и пробуйте.</p>
+<div class="tbs">
+<button class="tb on" data-t="p1">🤖 Чат-бот</button><button class="tb" data-t="p2">🧮 Калькулятор</button><button class="tb" data-t="p3">🛒 Магазин</button><button class="tb" data-t="p4">🎯 Квиз</button><button class="tb" data-t="p5">✨ Генератор</button><button class="tb" data-t="p7">✅ Халяль-чек</button>
+</div>
+
+<div class="pn cd" id="p1" style="padding:0">
+<div id="ch"></div><div id="qk"></div>
+<form id="cf"><input type="text" id="ci" placeholder="Напишите сообщение или номер телефона…" autocomplete="off"><button class="b">➤</button></form>
+</div>
+
+<div class="pn cd" id="p2" hidden>
+<h3>Рассчитайте стоимость проекта</h3>
+<div id="ca"></div>
+<label class="op"><input type="checkbox" id="rush"><span>🔥 Срочно (+30%)</span></label>
+<div class="mu">Ориентировочная стоимость (точную назову после обсуждения):</div><div id="tot" class="g">0 ₸</div><br>
+<button class="b" id="co">Заказать по расчёту</button>
+</div>
+
+<div class="pn" id="p3" hidden>
+<div class="two">
+<div class="sg" id="pr"></div>
+<div class="cd"><h3>🛍 Корзина (<span id="cc">0</span>)</h3><div id="cl"></div><p><b>Итого: <span id="st">0 ₸</span></b></p><button class="b" id="oc">Оформить в WhatsApp</button></div>
+</div>
+</div>
+
+<div class="pn cd" id="p4" hidden>
+<div id="qbar"><div id="qp"></div></div><div id="qb"></div>
+</div>
+
+<div class="pn cd" id="p5" hidden>
+<h3>Введите нишу — получите идею сайта</h3>
+<div style="display:flex;gap:8px"><input type="text" id="gi" placeholder="Например: кондитерская, автосервис"><button class="b" id="gb">Создать</button></div>
+<div id="go" style="margin-top:16px"></div>
+</div>
+
+<div class="pn cd" id="p6" hidden>
+<div style="display:flex;justify-content:space-between"><b>Заявок: <span id="gs">0</span></b><b>⏱ <span id="gt">15</span> с</b></div>
+<div id="gm"></div><p class="mu">Лови 📩 за 15 секунд. Бот не пропускает ни одной заявки!</p>
+<button class="b" id="gst">Старт</button>
+</div>
+
+<div class="pn cd" id="p7" hidden>
+<h3>✅ Халяль-чек проекта</h3>
+<p class="mu">Опишите, чем занимается ваш бизнес. Берусь только за халяль-тематику.</p>
+<div style="display:flex;gap:8px"><input type="text" id="hk" placeholder="Например: магазин одежды"><button class="b" id="hb">Проверить</button></div>
+<p id="hr" style="font-weight:700;margin-top:14px"></p>
+</div>
+</section>
+
+<section class="w" id="work">
+<h2>Примеры моих работ</h2>
+<p class="c mu">Настоящие сайты для бизнеса. Откройте и посмотрите сами.</p>
+<div class="gr">
+<a class="cd rv" href="https://sukrievmusa-hash.github.io/1/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="ic">🏗️</div><h3>Строительство и ремонт</h3><p class="mu">Сайт частного строителя в Таразе: услуги, калькулятор стоимости, гарантии, заявка в WhatsApp.</p><b class="g">Открыть сайт →</b></a>
+<a class="cd rv" href="https://sukrievmusa-hash.github.io/lulu/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="ic">💄</div><h3>Lulu Distribution</h3><p class="mu">B2B-портал оптового дистрибьютора косметики: анкета партнёра, быстрый заказ, автоподсчёт скидки.</p><b class="g">Открыть сайт →</b></a>
+<a class="cd rv" href="https://sukrievmusa-hash.github.io/Htefull/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="ic">📦</div><h3>TheFull</h3><p class="mu">Фулфилмент для Kaspi, Wildberries и Ozon: калькулятор стоимости, услуги, отзывы, карта.</p><b class="g">Открыть сайт →</b></a>
+<a class="cd rv" href="https://sukrievmusa-hash.github.io/Esquire_stroymarket/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="ic">🧱</div><h3>Esquire StroyMarket</h3><p class="mu">Строительный магазин в Алматы: каталог по категориям, условия для дизайнеров и строителей, склад, доставка и карта.</p><b class="g">Открыть сайт →</b></a>
+</div>
+</section>
+
+<section class="w" id="how">
+<h2>Как мы работаем</h2>
+<div class="gr">
+<div class="cd rv"><div class="num g">1</div><h3>Заявка</h3><p class="mu">Обсуждаем задачу и цели.</p></div>
+<div class="cd rv"><div class="num g">2</div><h3>Дизайн</h3><p class="mu">Показываю прототип.</p></div>
+<div class="cd rv"><div class="num g">3</div><h3>Разработка</h3><p class="mu">Делаю и тестирую.</p></div>
+<div class="cd rv"><div class="num g">4</div><h3>Запуск</h3><p class="mu">Публикую и поддерживаю.</p></div>
+</div>
+</section>
+
+<section class="w" id="faq" style="max-width:720px">
+<h2>Вопросы</h2>
+<details><summary>Что значит «халяль» в вашей работе?</summary><p class="mu">Честная цена, письменный договор, без обмана и скрытых платежей. Проекты для алкоголя, азартных игр и ставок не беру: только халяль.</p></details>
+<details><summary>Сколько стоит сайт?</summary><p class="mu">Зависит от задач. Ориентир можно прикинуть в калькуляторе выше, точную цену назову после обсуждения.</p></details>
+<details><summary>Как быстро будет готово?</summary><p class="mu">Обычно: лендинг — 3–5 дней, магазин — 2–3 недели, бот — 4–7 дней. Точный срок зависит от задачи.</p></details>
+<details><summary>Будет ли поддержка после запуска?</summary><p class="mu">Да, помогаю с правками и развитием проекта.</p></details>
+<details><summary>Сайт откроется с телефона?</summary><p class="mu">Конечно, всё адаптивно под любые экраны.</p></details>
+</section>
+
+<section class="w" id="contact">
+<h2>Давайте обсудим проект</h2>
+<form id="ct" class="cd" style="max-width:520px;margin:24px auto 0;display:grid;gap:10px">
+<input type="text" id="n1" placeholder="Ваше имя" required>
+<select id="s1"><option>Сайт</option><option>Чат-бот</option><option>Интернет-магазин</option><option>Автоматизация</option></select>
+<textarea id="m1" rows="3" placeholder="Расскажите о задаче"></textarea>
+<button class="b">Отправить в WhatsApp</button>
+</form>
+<p class="c mu">Или позвоните: <a href="tel:+77075269442" style="color:var(--ac);font-weight:700">+7 707 526 94 42</a></p>
+</section>
+
+<footer>© <span id="yr"></span> Разработка сайтов и ботов · <a href="tel:+77075269442" style="color:inherit">+7 707 526 94 42</a> · Сайты, чат-боты, автоматизация · 100% халяль</footer>
+
+<a id="wf" href="#" onclick="wa('Здравствуйте! Пишу с сайта.');return false" aria-label="WhatsApp">💬</a>
+<button id="up" aria-label="Наверх" onclick="scrollTo({top:0})">↑</button>
+<div id="ts"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+/* Измените эти данные под себя */
+const C={wa:'77075269442',cur:'₸'};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const R=document.documentElement;
+const wa=t=>window.open('https://wa.me/'+C.wa+'?text='+encodeURIComponent(t),'_blank');
+const fm=n=>n.toLocaleString('ru-RU')+' '+C.cur;
+function toast(t){const e=$('#ts');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2000)}
+$('#yr').textContent=new Date().getFullYear();
+
+/* тема и акцентный цвет */
+try{const t=localStorage.getItem('th');if(t)R.dataset.theme=t;const a=localStorage.getItem('ac');if(a)R.style.setProperty('--ac',a)}catch(e){}
+$('#tg').onclick=()=>{const d=R.dataset.theme==='dark'||(!R.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);R.dataset.theme=d?'light':'dark';try{localStorage.setItem('th',R.dataset.theme)}catch(e){}};
+['#6c5ce7','#00b894','#e17055','#0984e3','#e84393'].forEach(c=>{const b=document.createElement('button');b.className='sw';b.style.background=c;b.setAttribute('aria-label','Цвет');b.onclick=()=>{R.style.setProperty('--ac',c);try{localStorage.setItem('ac',c)}catch(e){};toast('Цвет сайта изменён')};$('#sws').append(b)});
+
+$('#bg').onclick=()=>$('nav').classList.toggle('open');$$('nav a').forEach(a=>a.addEventListener('click',()=>$('nav').classList.remove('open')));
+
+/* печатающийся заголовок */
+const W=['сайты','чат-ботов','интернет-магазины','автоматизацию'];let wi=0,ci=0,dl=0;
+(function tp(){const w=W[wi];ci+=dl?-1:1;$('#ty').textContent=w.slice(0,ci);let d=dl?40:90;if(!dl&&ci===w.length){dl=1;d=1400}else if(dl&&ci===0){dl=0;wi=(wi+1)%W.length;d=300}setTimeout(tp,d)})();
+
+/* появление и счётчики */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');const n=e.target.querySelector('.num[data-to]');if(n){const to=+n.dataset.to,t0=performance.now();(function f(t){const p=Math.min((t-t0)/1200,1);n.textContent=Math.round(to*p)+(n.dataset.s||'');if(p<1)requestAnimationFrame(f)})(t0)}io.unobserve(e.target)}),{threshold:.2});
+$$('.rv').forEach(e=>io.observe(e));
+let ph=0,pt=0;const mph=()=>{ph=R.scrollHeight-innerHeight};mph();addEventListener('resize',mph);setInterval(mph,1500);
+addEventListener('scroll',()=>{if(pt)return;pt=requestAnimationFrame(()=>{pt=0;$('#pg').style.width=(ph>0?scrollY/ph*100:0)+'%';$('#up').classList.toggle('on',scrollY>600)})},{passive:true});
+
+/* вкладки */
+$$('.tb').forEach(b=>b.onclick=()=>{$$('.tb').forEach(x=>x.classList.toggle('on',x===b));$$('.pn').forEach(p=>p.hidden=p.id!==b.dataset.t)});
+
+/* демо 1: чат-бот */
+const K={'Сайт':['Делаю лендинги и многостраничные сайты: быстро, адаптивно, с анимациями.',['Цены','Сроки','Оставить заявку']],
+'Чат-бот':['Боты для Telegram и WhatsApp: заявки, каталог, оплата, рассылки, ИИ-ответы.',['Цены','Сроки','Оставить заявку']],
+'Магазин':['Каталог, корзина, заказ в мессенджер или онлайн-оплата и админ-панель.',['Цены','Сроки','Оставить заявку']],
+'Цены':['Ориентировочно: лендинг от 60 000 ₸, магазин от 180 000 ₸, бот от 50 000 ₸. Точную цену назову после обсуждения задачи, а прикинуть можно во вкладке «Калькулятор».',['Сроки','Оставить заявку']],
+'Сроки':['Обычно: лендинг — 3–5 дней, магазин — 2–3 недели, бот — 4–7 дней. Точный срок зависит от задачи.',['Цены','Оставить заявку']],
+'Халяль':['Работаю только по-халяльному: честная цена, договор, без обмана и скрытых платежей. Не делаю проекты для алкоголя, азартных игр и ставок.',['Цены','Оставить заявку']],
+'Оставить заявку':['Напишите ваш номер телефона, и я передам заявку 📲',[]]};
+function say(t,u){const m=document.createElement('div');m.className='m'+(u?' u':'');m.textContent=t;$('#ch').append(m);$('#ch').scrollTop=1e5;return m}
+function chips(a){a.forEach(x=>{const b=document.createElement('button');b.textContent=x;b.onclick=()=>ask(x);$('#qk').append(b)})}
+function ask(t){say(t,1);$('#qk').innerHTML='';
+const r=K[t]||(t.replace(/\D/g,'').length>=10?['Спасибо! Заявка принята ✅ Скоро свяжусь с вами.',['Сайт','Чат-бот']]:/халяль|харам/i.test(t)?K['Халяль']:/цен|стоим|сколько/i.test(t)?K['Цены']:/срок|когда|долго/i.test(t)?K['Сроки']:['Не совсем понял 🤔 Выберите вариант:',['Сайт','Чат-бот','Магазин','Цены']]);
+const ty=say('печатает…');setTimeout(()=>{ty.remove();say(r[0]);chips(r[1])},700)}
+$('#cf').onsubmit=e=>{e.preventDefault();const v=$('#ci').value.trim();if(v){ask(v);$('#ci').value=''}};
+say('Привет! 👋 Я демо-бот. Отвечаю на вопросы и принимаю заявки. Что интересует?');chips(['Сайт','Чат-бот','Магазин','Цены','Сроки','Халяль']);
+
+/* демо 2: калькулятор */
+const O=[['Лендинг (1 страница)',60000],['Многостраничный сайт',120000],['Интернет-магазин',180000],['Чат-бот Telegram',50000],['Интеграция с WhatsApp',25000],['Админ-панель',40000],['SEO-настройка',30000],['Премиум-дизайн',35000]];
+$('#ca').innerHTML=O.map((o,i)=>`<label class="op"><input type="checkbox" data-i="${i}"><span>${o[0]}</span><b>${fm(o[1])}</b></label>`).join('');
+let cur=0,sum=0;
+function calc(){sum=0;$$('#ca input:checked').forEach(c=>sum+=O[c.dataset.i][1]);if($('#rush').checked)sum=Math.round(sum*1.3);const from=cur,to=sum,t0=performance.now();cur=to;(function f(t){const p=Math.min((t-t0)/500,1);$('#tot').textContent=fm(Math.round(from+(to-from)*p));if(p<1)requestAnimationFrame(f)})(t0)}
+$$('#p2 input').forEach(i=>i.onchange=calc);
+$('#co').onclick=()=>{const l=$$('#ca input:checked').map(c=>O[c.dataset.i][0]);if(!l.length)return toast('Выберите хотя бы одну услугу');wa('Хочу заказать: '+l.join(', ')+'. Расчёт: '+fm(sum))};
+
+/* демо 3: магазин */
+const P=[['👟','Кроссовки',24900],['🎧','Наушники',18500],['⌚','Часы',32000],['🎒','Рюкзак',15900]];const cart={};
+$('#pr').innerHTML=P.map((p,i)=>`<div class="cd pc"><div class="em">${p[0]}</div><b>${p[1]}</b><span class="mu">${fm(p[2])}</span><button class="b" data-i="${i}">В корзину</button></div>`).join('');
+$$('#pr button').forEach(b=>b.onclick=()=>{cart[b.dataset.i]=(cart[b.dataset.i]||0)+1;draw();toast('Добавлено в корзину')});
+function draw(){const k=Object.keys(cart);let s=0;$('#cl').innerHTML=k.length?k.map(i=>{s+=P[i][2]*cart[i];return `<div class="ci"><span>${P[i][0]} ${P[i][1]}</span><span><button class="q" data-i="${i}" data-d="-1">−</button> ${cart[i]} <button class="q" data-i="${i}" data-d="1">+</button></span></div>`}).join(''):'<p class="mu">Корзина пуста</p>';
+$('#st').textContent=fm(s);$('#cc').textContent=Object.values(cart).reduce((a,b)=>a+b,0);
+$$('.q').forEach(b=>b.onclick=()=>{const i=b.dataset.i;cart[i]+=+b.dataset.d;if(cart[i]<1)delete cart[i];draw()})}
+draw();
+$('#oc').onclick=()=>{const k=Object.keys(cart);if(!k.length)return toast('Корзина пуста');wa('Заказ из демо-магазина:\n'+k.map(i=>P[i][1]+' × '+cart[i]).join('\n')+'\nИтого: '+$('#st').textContent)};
+
+/* демо 4: квиз */
+const Q=[['Что вам нужно?',[['Рассказать о себе или услуге',0],['Продавать товары',1],['Общаться с клиентами автоматически',2]]],
+['Откуда приходят клиенты?',[['Instagram и TikTok',0],['Поиск и маркетплейсы',1],['Мессенджеры',2]]],
+['Что важнее всего?',[['Быстрый запуск',0],['Каталог и оплата',1],['Ответы 24/7',2]]]];
+const RS=[['Лендинг','Одна яркая страница с формой заявки: быстро и недорого.'],['Интернет-магазин','Каталог, корзина и приём заказов в мессенджер.'],['Чат-бот','Бот отвечает клиентам 24/7 и собирает заявки.']];
+let qi=0,sc=[0,0,0];
+function qz(){const b=$('#qb');
+if(qi>=Q.length){const r=RS[sc.indexOf(Math.max(...sc))];$('#qp').style.width='100%';burst();b.innerHTML=`<h3>Вам подойдёт: <span class="g">${r[0]}</span></h3><p class="mu">${r[1]}</p><button class="b" id="qw">Обсудить в WhatsApp</button> <button class="b2" id="qa">Пройти заново</button>`;$('#qw').onclick=()=>wa('Хочу: '+r[0]+' (результат квиза)');$('#qa').onclick=()=>{qi=0;sc=[0,0,0];qz()};return}
+$('#qp').style.width=qi/Q.length*100+'%';
+b.innerHTML='<h3>'+Q[qi][0]+'</h3>'+Q[qi][1].map((o,i)=>`<button class="b2 blk" data-i="${i}">${o[0]}</button>`).join('');
+$$('#qb .blk').forEach(x=>x.onclick=()=>{sc[Q[qi][1][x.dataset.i][1]]++;qi++;qz()})}
+qz();
+
+/* 3D-машина на фоне: лёгкая версия */
+(function(){if(typeof THREE==='undefined'){$('#spd').remove();$('#c3').remove();$('#b3').remove();return}
+const cv=$('#c3'),rm=matchMedia('(prefers-reduced-motion:reduce)').matches;let rn;
+try{rn=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:false,powerPreference:'low-power'})}catch(e){cv.remove();$('#spd').remove();$('#b3').remove();return}
+rn.setPixelRatio(1);
+const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(50,1,.1,150);
+sc.add(new THREE.AmbientLight(0xffffff,.8));
+const dl=new THREE.DirectionalLight(0xffffff,.8);dl.position.set(3,6,4);sc.add(dl);
+const M=(c,o)=>new THREE.MeshLambertMaterial(Object.assign({color:c},o||{}));
+const bm=M(0x6c5ce7),zm=M(0x6c5ce7,{transparent:true,opacity:.18});
+const car=new THREE.Group();sc.add(car);
+const bx=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
+const add=(g,m,x,y,z,p)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);(p||car).add(o);return o};
+add(bx(2,.6,4.2),bm,0,.75,0);add(bx(1.6,.55,2),M(0x1b2a3a),0,1.3,.3);add(bx(1.9,.08,.5),bm,0,1.5,1.9);
+const tl=new THREE.MeshBasicMaterial({color:0xff2d2d});[-.65,.65].forEach(x=>add(bx(.5,.18,.05),tl,x,.85,2.12));
+const wg=new THREE.CylinderGeometry(.45,.45,.4,10),wm=M(0x111111),hg=bx(.42,.1,.7),hm=M(0xcccccc),WH=[];
+[[-1.05,-1.4],[1.05,-1.4],[-1.05,1.4],[1.05,1.4]].forEach(a=>{const g=new THREE.Group();g.position.set(a[0],.45,a[1]);car.add(g);add(wg,wm,0,0,0,g).rotation.z=Math.PI/2;add(hg,hm,0,0,0,g);WH.push(g)});
+add(new THREE.PlaneGeometry(8,200),new THREE.MeshBasicMaterial({color:0x2b2f3a,transparent:true,opacity:.7}),0,0,-90,sc).rotation.x=-Math.PI/2;
+const wl=new THREE.MeshBasicMaterial({color:0xffffff}),eg=bx(.15,.02,200),dg=bx(.15,.02,3),DS=[];
+[-3.8,3.8].forEach(x=>add(eg,wl,x,.02,-90,sc));
+for(let i=0;i<10;i++)[-2,2].forEach(x=>DS.push(add(dg,wl,x,.02,-i*12,sc)));
+const bg=bx(1,1,1),BD=[];
+function rb(b){const s=Math.random()<.5?-1:1,h=2+Math.random()*12;b.scale.set(2+Math.random()*3,h,2+Math.random()*3);b.position.x=s*(7+Math.random()*9);b.position.y=h/2}
+for(let i=0;i<12;i++){const b=add(bg,zm,0,0,-i*10,sc);rb(b);BD.push(b)}
+$('#tk').innerHTML=Array.from({length:11},(_,i)=>{const a=(-135+27*i)*Math.PI/180,s=Math.sin(a),c=Math.cos(a),r=i%5?34:30;return '<line x1="'+(50+r*s)+'" y1="'+(50-r*c)+'" x2="'+(50+35*s)+'" y2="'+(50-35*c)+'" stroke="currentColor" stroke-width="'+(i%5?1:2)+'" opacity=".5"/>'}).join('');
+const nd=$('#nd'),pa=$('#pa'),kh=$('#kmh');
+let on=true,H=0,sy=scrollY,dirty=true,v=0,t0=-1e3,tt=0,lk=-1,la='',lb='';
+const gc=n=>getComputedStyle(R).getPropertyValue(n).trim();
+function theme(){const a=gc('--ac'),b=gc('--bg');if(a&&a!==la){la=a;bm.color.set(a);zm.color.set(a);dirty=true}if(b&&b!==lb){lb=b;if(sc.fog)sc.fog.color.set(b);else sc.fog=new THREE.Fog(new THREE.Color(b),25,95);dirty=true}}
+function mh(){H=R.scrollHeight-innerHeight}
+function rs(){const w=innerWidth,h=Math.round(innerHeight*.5);rn.setSize(w,h,false);cam.aspect=w/h;cam.position.set(0,2.6,7+Math.max(0,1.2-w/h)*4);cam.lookAt(0,1.2,-10);cam.updateProjectionMatrix();mh();dirty=true}
+addEventListener('resize',rs);addEventListener('scroll',()=>{sy=scrollY},{passive:true});
+rs();theme();setInterval(()=>{theme();mh()},1000);
+const b3=$('#b3');
+function set3(x){on=x;cv.style.display=x?'':'none';$('#spd').style.display=x?'':'none';b3.style.opacity=x?1:.45;try{localStorage.setItem('c3',x?'1':'0')}catch(e){}if(x){dirty=true;t0=-1e3}}
+b3.onclick=()=>set3(!on);let sv=null;try{sv=localStorage.getItem('c3')}catch(e){}
+set3(sv===null?!matchMedia('(pointer:coarse)').matches:sv==='1');
+function fr(now){if(!rm)requestAnimationFrame(fr);if(!on)return;
+if(now-t0<33)return;
+const dt=Math.min((now-t0)/1000,.1);t0=now;tt+=dt;
+const p=H>0?Math.min(sy/H,1):0;v+=(p-v)*Math.min(1,dt*3);
+const k=Math.floor(v*320);if(k!==lk){lk=k;nd.setAttribute('transform','rotate('+(-135+270*v)+' 50 50)');pa.style.strokeDashoffset=188.5*(1-v);kh.textContent=k}
+if(v<.003&&p<.003&&!dirty)return;
+dirty=false;
+const sp=v*60*dt;
+DS.forEach(d=>{d.position.z+=sp;if(d.position.z>8)d.position.z-=120});
+BD.forEach(b=>{b.position.z+=sp;if(b.position.z>12){b.position.z-=120;rb(b)}});
+WH.forEach(w=>w.rotation.x-=v*10*dt);
+car.rotation.z=Math.sin(tt*2)*.012*v;
+rn.render(sc,cam)}
+requestAnimationFrame(fr)})();
+
+/* конфетти, бегущая строка, подсветка */
+
+/* конфетти, бегущая строка, подсветка */
+
+/* конфетти, бегущая строка, подсветка */
+const esc=s=>s.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+function burst(){const cv=document.createElement('canvas');cv.id='cv';cv.width=innerWidth;cv.height=innerHeight;document.body.append(cv);const x=cv.getContext('2d'),A=Array.from({length:90},()=>({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*14,vy:Math.random()*-14-2,c:'hsl('+Math.random()*360+',80%,60%)',s:5+Math.random()*5}));let f=0;(function a(){x.clearRect(0,0,cv.width,cv.height);A.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.45;x.fillStyle=p.c;x.fillRect(p.x,p.y,p.s,p.s)});if(++f<90)requestAnimationFrame(a);else cv.remove()})()}
+const hs='✅ ХАЛЯЛЬ · честная цена · без обмана · прозрачная смета · халяль-подход · без скрытых платежей · ',hh=hs.repeat(3);$('#mqt').innerHTML=hh+hh;
+if(matchMedia('(pointer:fine)').matches){const g=document.createElement('div');g.id='gl';document.body.append(g);addEventListener('mousemove',e=>{g.style.transform='translate('+(e.clientX-180)+'px,'+(e.clientY-180)+'px)'})}
+
+/* генератор идеи сайта */
+const PL=[['#6c5ce7','#00c2b8'],['#e17055','#fdcb6e'],['#00b894','#0984e3'],['#e84393','#6c5ce7']];
+const HT=['{n}: качество, которому доверяют','{n}: просто, быстро, честно','Всё о нише «{n}» в одном месте','{n} с гарантией и честной ценой'];
+function gen(){const n=$('#gi').value.trim();if(!n)return toast('Введите нишу');let h=0;for(const c of n)h+=c.charCodeAt(0);const p=PL[h%4],t=esc(HT[h%4].replace('{n}',n[0].toUpperCase()+n.slice(1)));
+$('#go').innerHTML='<div style="border:1px solid var(--bd);border-radius:14px;overflow:hidden"><div style="padding:30px 18px;text-align:center;color:#fff;background:linear-gradient(135deg,'+p[0]+','+p[1]+')"><h3 style="margin:0 0 12px">'+t+'</h3><span style="background:#fff;color:#111;border-radius:10px;padding:8px 14px;font-weight:700">Оставить заявку</span></div></div><p class="mu">Блоки: '+['Преимущества','Цены','Отзывы','Квиз','Калькулятор','Чат-бот','Карта','FAQ'].filter((_,i)=>(h+i)%3).join(' · ')+'</p><button class="b" id="gw">Хочу такой сайт</button>';
+$('#gw').onclick=()=>wa('Хочу сайт для ниши: '+n);burst()}
+$('#gb').onclick=gen;$('#gi').onkeydown=e=>{if(e.key==='Enter')gen()};
+
+/* игра «поймай заявку» */
+let gsn=0,gtm=0,gint,gsp;
+$('#gst').onclick=()=>{clearInterval(gint);clearInterval(gsp);gsn=0;gtm=15;$('#gs').textContent=0;$('#gt').textContent=15;$('#gm').innerHTML='';
+gsp=setInterval(()=>{const b=document.createElement('button');b.className='ld';b.textContent='📩';b.style.left=Math.random()*85+'%';b.style.top=Math.random()*80+'%';b.onclick=()=>{b.remove();$('#gs').textContent=++gsn};$('#gm').append(b);setTimeout(()=>b.remove(),1100)},550);
+gint=setInterval(()=>{$('#gt').textContent=--gtm;if(gtm<=0){clearInterval(gint);clearInterval(gsp);$('#gm').innerHTML='';toast('Поймано заявок: '+gsn+'. Бот не пропустит ни одной!');burst()}},1000)};
+
+/* халяль-чек */
+function hc(){const v=$('#hk').value.trim();if(!v)return toast('Опишите бизнес');const bad=/алког|пиво|пива|водк|виски|коньяк|казино|ставк|букмек|азарт|лотере|свинин|(^|[^а-я])вин[оау]($|[^а-я])/i.test(v);$('#hr').textContent=bad?'❌ С такой тематикой не работаю: это не халяль.':'✅ Халяль! Берусь за проект «'+v+'». Пишите в WhatsApp.';if(!bad)burst()}
+$('#hb').onclick=hc;$('#hk').onkeydown=e=>{if(e.key==='Enter')hc()};
+
+/* выгода от бота */
+const nv=id=>+$(id).value.replace(/\D/g,'')||0;
+function roi(){const s=nv('#r1'),p=+$('#r2').value,c=nv('#r3'),m=Math.round(s*p/100);$('#r2v').textContent=p+'%';$('#rm').textContent=fm(m);$('#ry').textContent=fm(m*12-c);$('#rp').textContent=m>0?(c/m).toFixed(1).replace('.',',')+' мес.':'—'}
+$$('#why input').forEach(i=>i.oninput=roi);roi();
+
+/* контакты */
+$('#ct').onsubmit=e=>{e.preventDefault();wa('Здравствуйте! Меня зовут '+$('#n1').value+'. Нужен: '+$('#s1').value+'. '+$('#m1').value);toast('Открываю WhatsApp…')};
+</script>
+</body>
+</html>
