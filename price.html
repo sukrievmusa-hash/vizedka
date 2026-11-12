@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Прайс-лист MUSA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* layout: одна колонка до 760px, тёмная обложка, строки прайса с галочками, липкая панель расчёта снизу */
+  --bg:#EFE9DD; --surface:#F9F5EC; --ink:#1D1B16; --muted:#6A6455; --line:#D9D0BE;
+  --accent:#1F4D3A; --on-accent:#F4EFE3; --cover:#1D1B16; --on-cover:#F1EADB; --cover-muted:#B3AA96; --hot:#B4541F;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#15140F; --surface:#1F1D17; --ink:#EDE6D6; --muted:#A39B88; --line:#37332A;
+    --accent:#86CBA6; --on-accent:#10261C; --cover:#262319; --on-cover:#F1EADB; --cover-muted:#B3AA96; --hot:#E79A64;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15140F; --surface:#1F1D17; --ink:#EDE6D6; --muted:#A39B88; --line:#37332A;
+  --accent:#86CBA6; --on-accent:#10261C; --cover:#262319; --on-cover:#F1EADB; --cover-muted:#B3AA96; --hot:#E79A64;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);padding-bottom:120px;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* шапка */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;font-size:14px}
+.brand{font-family:var(--display);font-weight:700;letter-spacing:.14em;font-size:15px}
+.top a{text-decoration:none;font-weight:600}
+
+/* обложка */
+.cover{background:var(--cover);color:var(--on-cover);border-radius:20px;padding:28px 22px 24px;display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cover-muted)}
+.cover h1{font-size:clamp(26px,7.4vw,44px);font-weight:700}
+.cover h1 em{font-style:normal;color:#9FD9B8}
+.cover p{margin:0;color:var(--cover-muted);max-width:56ch}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border-radius:999px;font:600 15px var(--body);text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn-main{background:#9FD9B8;color:#10261C}
+.btn-ghost{border-color:#4A463A;color:var(--on-cover)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;border-top:1px solid #3A362C;padding-top:16px}
+.facts b{display:block;font-family:var(--display);font-size:clamp(18px,5vw,26px);font-weight:700}
+.facts span{font-size:12.5px;color:var(--cover-muted);line-height:1.3;display:block}
+
+section{margin-top:44px}
+.sec-h{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.sec-h h2{font-size:clamp(20px,5.4vw,28px);font-weight:700}
+.sec-h p{margin:0;color:var(--muted);max-width:60ch}
+
+/* зачем */
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.why div{border-left:3px solid var(--accent);padding:4px 0 4px 12px}
+.why b{display:block}
+.why span{color:var(--muted);font-size:14.5px}
+
+/* фильтр */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:5}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:8px 14px;font:500 14px var(--body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* прайс */
+.cat{margin-top:22px}
+.cat h3{font-size:15px;font-weight:700;letter-spacing:.04em;display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.cat h3 small{font:400 13px var(--body);color:var(--muted);letter-spacing:0}
+.row{display:grid;grid-template-columns:24px 1fr auto;gap:4px 12px;align-items:start;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.row input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);cursor:pointer}
+.row .n{font-weight:600}
+.row .d{grid-column:2;color:var(--muted);font-size:14px;line-height:1.4}
+.row .p{text-align:right;font-weight:700}
+.row .t{grid-column:3;grid-row:2;text-align:right;color:var(--muted);font-size:13px}
+.row:has(input:checked){background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--accent) 10%,transparent))}
+.tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--hot);border:1px solid currentColor;border-radius:4px;padding:0 5px;margin-left:6px;vertical-align:2px}
+
+/* пакеты */
+.packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.pack{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.pack.best{border:2px solid var(--accent)}
+.pack h3{font-size:17px}
+.pack .for{color:var(--muted);font-size:14px;margin:0}
+.pack ul{margin:0;padding-left:18px;font-size:14.5px;display:flex;flex-direction:column;gap:3px;flex:1}
+.pack .price{font-family:var(--display);font-weight:700;font-size:22px}
+.pack s{color:var(--muted);font-size:14px;font-family:var(--body);font-weight:400;margin-right:6px}
+.pack .btn{background:var(--accent);color:var(--on-accent);min-height:42px}
+.badge{align-self:flex-start;background:var(--accent);color:var(--on-accent);font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px}
+
+/* работы */
+.works h3{font-size:14px;letter-spacing:.04em;margin:22px 0 4px;color:var(--muted);font-weight:500}
+.work{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:13px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.work b{font-weight:600}
+.work span{grid-column:1;color:var(--muted);font-size:14px;line-height:1.4}
+.work i{grid-row:1/3;grid-column:2;align-self:center;font-style:normal;color:var(--accent);font-weight:600;font-size:14px;white-space:nowrap}
+
+/* шаги и условия */
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;padding:0;margin:0;list-style:none}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:700;color:var(--accent);font-size:20px;display:block}
+.steps b{display:block}
+.steps span{color:var(--muted);font-size:14px}
+.rules{margin:16px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.rules li{padding-left:22px;position:relative}
+.rules li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:6px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+
+.end{background:var(--cover);color:var(--on-cover);border-radius:20px;padding:26px 22px;display:flex;flex-direction:column;gap:14px}
+.end h2{font-size:clamp(20px,5.6vw,30px)}
+.end p{margin:0;color:var(--cover-muted)}
+.end .tel{font-family:var(--display);font-weight:700;font-size:clamp(20px,6vw,28px);text-decoration:none}
+footer{margin-top:22px;color:var(--muted);font-size:13px;text-align:center}
+
+/* панель расчёта */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:10;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px))}
+.bar .wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar .sum{flex:1;min-width:150px;line-height:1.25}
+.bar .sum b{font-family:var(--display);font-size:17px;display:block}
+.bar .sum span{font-size:13px;color:var(--muted)}
+.bar label{font-size:13px;display:flex;align-items:center;gap:6px;cursor:pointer}
+.bar input{accent-color:var(--accent);width:18px;height:18px}
+.bar .btn{background:var(--accent);color:var(--on-accent);min-height:42px;padding:0 16px;font-size:14px}
+.bar .clr{background:none;border:0;color:var(--muted);font:500 13px var(--body);text-decoration:underline;cursor:pointer;padding:4px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./" style="text-decoration:none">MUSA</a>
+    <a href="tel:+77075269442">+7 707 526 94 42</a>
+  </header>
+
+  <div class="cover">
+    <span class="eyebrow">Прайс-лист · 2026 · Казахстан</span>
+    <h1>Клиент написал вам ночью. Ответил <em>конкурент</em>.</h1>
+    <p>Сайт, бот и автоматизация принимают заявки, пока вы заняты или спите. Ниже всё, что я делаю для бизнеса, с ценой и сроком. Отметьте нужное и сразу увидите сумму.</p>
+    <div class="cta">
+      <a class="btn btn-main" href="#price">Собрать свой расчёт</a>
+      <a class="btn btn-ghost" href="https://wa.me/77075269442?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D0%B1%D1%81%D1%83%D0%B4%D0%B8%D1%82%D1%8C%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82." target="_blank" rel="noopener">Написать в WhatsApp</a>
+    </div>
+    <div class="facts">
+      <div><b>10</b><span>работающих проектов можно открыть ниже</span></div>
+      <div><b>от 3 дней</b><span>до запуска лендинга</span></div>
+      <div><b>0 ₸</b><span>скрытых платежей: цена фиксируется до старта</span></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-h"><h2>Что вы теряете без этого</h2></div>
+    <div class="why">
+      <div><b>Заявки после 19:00</b><span>Человек написал вечером, ответа нет, утром он уже купил у другого.</span></div>
+      <div><b>Время на одни и те же вопросы</b><span>Цена, адрес, сроки. Бот отвечает на это сам и передаёт вам готовую заявку.</span></div>
+      <div><b>Доверие</b><span>Нет сайта с ценами и контактами, и клиент сомневается, что бизнес настоящий.</span></div>
+    </div>
+  </section>
+
+  <section id="price">
+    <div class="sec-h">
+      <h2>Услуги и цены</h2>
+      <p>Цены указаны «от», в тенге. Точную сумму называю после короткого обсуждения, и она не меняется по ходу работы.</p>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Категории"></div>
+    <div id="list"></div>
+  </section>
+
+  <section>
+    <div class="sec-h"><h2>Готовые пакеты</h2><p>Дешевле, чем собирать по отдельности.</p></div>
+    <div class="packs" id="packs"></div>
+  </section>
+
+  <section class="works">
+    <div class="sec-h"><h2>Работы</h2><p>Не картинки, а живые проекты. Откройте с телефона и нажимайте.</p></div>
+    <div id="works"></div>
+  </section>
+
+  <section>
+    <div class="sec-h"><h2>Как идёт работа</h2></div>
+    <ol class="steps">
+      <li><b>Заявка</b><span>Обсуждаем задачу и цель. Называю цену и срок.</span></li>
+      <li><b>Прототип</b><span>Показываю, как это будет выглядеть.</span></li>
+      <li><b>Разработка</b><span>Делаю, тестирую на телефоне и компьютере.</span></li>
+      <li><b>Запуск</b><span>Публикую, объясняю, как пользоваться, остаюсь на связи.</span></li>
+    </ol>
+    <ul class="rules">
+      <li>Цена и объём работ фиксируются письменно до старта.</li>
+      <li>Всё адаптировано под телефон: клиенты заходят именно с него.</li>
+      <li>После запуска не пропадаю: помогаю с правками и развитием.</li>
+      <li>Работаю только с халяль-тематикой. Проекты для алкоголя, азартных игр и ставок не беру.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="end">
+      <h2>Расскажите задачу. Цену и срок назову в тот же день.</h2>
+      <p>Можно голосовым, можно просто ссылкой на ваш Instagram.</p>
+      <a class="tel" href="tel:+77075269442">+7 707 526 94 42</a>
+      <div class="cta">
+        <a class="btn btn-main" href="https://wa.me/77075269442?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BE%D0%B1%D1%81%D1%83%D0%B4%D0%B8%D1%82%D1%8C%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82." target="_blank" rel="noopener">Написать в WhatsApp</a>
+        <a class="btn btn-ghost" href="https://sukrievmusa-hash.github.io/vizedka/" target="_blank" rel="noopener">Попробовать демо на сайте</a>
+      </div>
+    </div>
+    <footer>MUSA · Муса · Тараз, работаю по всему Казахстану</footer>
+  </section>
+</div>
+
+<div class="bar" role="region" aria-label="Расчёт">
+  <div class="wrap">
+    <div class="sum"><b id="total">0 ₸</b><span id="hint">Отметьте услуги в списке, сумма посчитается сама</span></div>
+    <label for="rush"><input type="checkbox" id="rush"> Срочно +30%</label>
+    <a class="btn" id="send" href="https://wa.me/77075269442" target="_blank" rel="noopener">Отправить расчёт</a>
+    <button class="clr" id="clr" type="button" hidden>Сбросить</button>
+  </div>
+</div>
+
+<script>
+const WA='77075269442';
+// [название, описание, цена, срок, метка, 'm' = в месяц | 'u' = за штуку]
+const CATS=[
+ ['Сайты',[
+  ['Сайт-визитка','Одна страница: кто вы, услуги, контакты, кнопка WhatsApp',40000,'2–3 дня'],
+  ['Лендинг','Продающая страница под одну услугу или товар, форма заявки, анимации',60000,'3–5 дней','хит'],
+  ['Многостраничный сайт','Главная, услуги, цены, о компании, контакты, карта',120000,'7–10 дней'],
+  ['Каталог с заказом в WhatsApp','Товары или меню, корзина, заказ уходит вам в мессенджер',90000,'5–7 дней'],
+  ['Интернет-магазин','Категории, корзина, оформление заказа, оплата',180000,'2–3 недели'],
+  ['B2B-портал','Анкета партнёра, быстрый оптовый заказ, автоподсчёт скидки',200000,'2–3 недели'],
+  ['Админ-панель к сайту','Сами меняете цены, фото и тексты без программиста',40000,'3–4 дня'],
+  ['Калькулятор стоимости','Клиент сам считает цену и отправляет заявку',25000,'2 дня'],
+  ['Квиз для заявок','Несколько вопросов, в конце контакт клиента',25000,'2 дня'],
+  ['Вторая языковая версия','Казахский и русский с переключателем',25000,'2–3 дня'],
+  ['Редизайн сайта','Обновляю внешний вид и скорость, содержание сохраняю',50000,'4–6 дней'],
+  ['Премиум-дизайн','Индивидуальная графика и анимации вместо типовых блоков',35000,'+2 дня'],
+ ]],
+ ['Боты',[
+  ['Telegram-бот','Меню, ответы на частые вопросы, приём заявок',50000,'4–7 дней','хит'],
+  ['Бот с ИИ-ответами','Понимает вопросы обычным языком, знает ваши цены и услуги',120000,'7–10 дней'],
+  ['Бот записи и напоминаний','Клиент записывается сам, получает напоминание за сутки и за 2 часа',80000,'5–7 дней'],
+  ['Бот-каталог','Товары, корзина и заказ прямо в Telegram',90000,'7 дней'],
+  ['Заявки в Google Таблицу','Все обращения из бота и сайта собираются в одну таблицу',30000,'2 дня'],
+  ['Интеграция с WhatsApp','Кнопки, готовые сообщения, заявки с сайта в ваш WhatsApp',25000,'1–2 дня'],
+  ['Рассылки по базе','Акции и новости клиентам, с сегментами',30000,'2–3 дня'],
+  ['Уведомления владельцу','Новая заявка или заказ сразу приходит вам в Telegram',15000,'1 день'],
+ ]],
+ ['Системы',[
+  ['CRM под ваш бизнес','Заявки по этапам, клиенты, оплаты, задачи, отчёты по ролям',250000,'3–4 недели'],
+  ['Онлайн-запись по подписке','Готовый сервис Jazylam: страница записи, журнал, напоминания',10000,'15 минут','готово','m'],
+  ['Платформа с подпиской','Личный кабинет, тарифы, оплата переводом Kaspi, админка',350000,'4–6 недель'],
+  ['Обучающая платформа или тренажёр','Задания с разбором, тесты, прогресс ученика',300000,'4–6 недель'],
+  ['Веб-приложение на телефон','Ставится на экран как приложение, работает без магазина приложений',150000,'2–3 недели'],
+  ['Дашборд для руководителя','Выручка, заявки, конверсия и долги на одном экране',60000,'5–7 дней'],
+  ['Автоматизация таблиц','Автоподсчёты, отчёты и напоминания в Google Таблицах',30000,'2–4 дня'],
+  ['Генератор документов','Договор, счёт или КП заполняются сами по данным клиента',40000,'3–5 дней'],
+  ['Связка сервисов','Сайт, бот, таблица и почта передают данные друг другу',35000,'3–5 дней'],
+ ]],
+ ['Дизайн и реклама',[
+  ['Логотип','3 варианта, финальный в форматах для печати и соцсетей',25000,'3 дня'],
+  ['Фирменный стиль','Логотип, цвета, шрифты, шаблоны постов и визитки',60000,'5–7 дней'],
+  ['Афиша или баннер','Для соцсетей, печати или наружной рекламы',8000,'1 день'],
+  ['Пакет из 10 постов','Оформление и текст в едином стиле',30000,'3–4 дня'],
+  ['Рекламный ролик до 30 секунд','Для Reels и TikTok: сценарий, монтаж, титры',30000,'2–3 дня'],
+  ['Карточка товара','Для Kaspi, Wildberries, Ozon: инфографика и описание',3000,'1 день',null,'u'],
+  ['Презентация или КП','До 12 слайдов, которые не стыдно отправить клиенту',25000,'2–3 дня'],
+  ['Продающие тексты','Тексты для сайта по схеме: проблема, решение, выгода, призыв',20000,'2 дня'],
+  ['Меню или прайс-лист','Оформленный файл для печати и рассылки',15000,'1–2 дня'],
+  ['Визитка с QR-кодом','QR ведёт на сайт, WhatsApp или запись',7000,'1 день'],
+ ]],
+ ['Запуск и поддержка',[
+  ['Домен и хостинг под ключ','Подбираю имя, регистрирую, подключаю сайт',15000,'1 день'],
+  ['SEO-настройка','Заголовки, описания, скорость, чтобы сайт находили в поиске',30000,'3 дня'],
+  ['Карточки в 2ГИС и Google Картах','Оформление, фото, ссылка на сайт',10000,'1 день'],
+  ['Аналитика','Видите, сколько людей зашло и откуда пришли заявки',15000,'1 день'],
+  ['Перенос сайта','Переезд на новый хостинг или домен без потери данных',20000,'1–2 дня'],
+  ['Обучение владельца','Показываю, как самому менять сайт и работать с ботом',10000,'1 час'],
+  ['Поддержка и правки','Обновления, мелкие доработки, ответы в течение дня',15000,'ежемесячно',null,'m'],
+ ]],
+];
+const PACKS=[
+ ['Старт','Для мастера или небольшого дела',['Лендинг','Интеграция с WhatsApp','Домен и хостинг под ключ'],100000,89000],
+ ['Бизнес','Для компании, которой нужны заявки каждый день',['Многостраничный сайт','Telegram-бот','Админ-панель к сайту','SEO-настройка'],240000,219000,1],
+ ['Под ключ','Продажи, бот и стиль сразу',['Интернет-магазин','Бот с ИИ-ответами','Админ-панель к сайту','Фирменный стиль','SEO-настройка','Поддержка 3 месяца'],475000,429000],
+];
+const WORKS=[
+ ['Свои продукты',[
+  ['Jazylam','Сервис онлайн-записи по подписке: страница записи с QR, журнал по мастерам, напоминания клиентам в Telegram','https://jazylam.kz/'],
+  ['Talap','Тренажёр ЕНТ по подписке: задания с разбором, пробное ЕНТ, работа над ошибками','https://sukrievmusa-hash.github.io/raff/'],
+  ['Грант CRM','CRM для школы подготовки к ЕНТ: канбан заявок, оплаты, прогноз балла, отчёт родителю, рассылки на двух языках','https://sukrievmusa-hash.github.io/crm1/'],
+ ]],
+ ['Сайты для бизнеса',[
+  ['Rollmi','Доставка еды, Балхаш: меню, корзина, заказ в WhatsApp и админка, где владелец сам меняет цены и фото','https://sukrievmusa-hash.github.io/raf/pizza/'],
+  ['Строительство и ремонт','Частный строитель, Тараз: услуги, калькулятор стоимости, гарантии, заявка в WhatsApp','https://sukrievmusa-hash.github.io/raf/'],
+  ['Lulu Distribution','B2B-портал дистрибьютора косметики: анкета партнёра, быстрый заказ, автоподсчёт скидки','https://sukrievmusa-hash.github.io/lulu/'],
+  ['Astral Computers','Сборка ПК, продажа и выкуп комплектующих','https://sukrievmusa-hash.github.io/austra/'],
+  ['Tlg-Se СВХ','Сайт склада временного хранения','https://sukrievmusa-hash.github.io/musa./'],
+ ]],
+ ['Обучение и игры',[
+  ['Арабский по Мединскому курсу','Игра: 143 слова, 17 видов упражнений, озвучка и голосовой ввод','https://sukrievmusa-hash.github.io/madinah-arabic-game/madinah_arabic_game.html'],
+  ['Мат-повтор','Повторение лекций по кривой забывания в виде игры: 185 карточек по высшей математике','https://sukrievmusa-hash.github.io/-/'],
+ ]],
+];
+
+const fmt=n=>n.toLocaleString('ru-RU').replace(/ | /g,' ')+' ₸';
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const ITEMS=[];let filter=-1;
+
+function drawList(){
+  let h='';
+  CATS.forEach(([name,items],ci)=>{
+    if(filter>-1&&filter!==ci)return;
+    h+=`<div class="cat"><h3>${name}<small>${items.length} услуг</small></h3>`;
+    items.forEach((it,ii)=>{
+      const id='s'+ci+'_'+ii,suf=it[5]==='m'?' / мес':it[5]==='u'?' / шт':'';
+      h+=`<label class="row" for="${id}"><input type="checkbox" id="${id}" data-c="${ci}" data-i="${ii}"${it.on?' checked':''}>
+      <span class="n">${esc(it[0])}${it[4]?`<span class="tag">${it[4]}</span>`:''}</span><span class="p num">от ${fmt(it[2])}${suf}</span>
+      <span class="d">${esc(it[1])}</span><span class="t">${it[3]}</span></label>`;
+    });
+    h+='</div>';
+  });
+  $('#list').innerHTML=h;
+}
+function drawChips(){
+  const total=CATS.reduce((a,c)=>a+c[1].length,0);
+  $('#chips').innerHTML=[['Все · '+total,-1],...CATS.map((c,i)=>[c[0],i])]
+    .map(([t,i])=>`<button class="chip" type="button" data-f="${i}" aria-pressed="${i===filter}">${t}</button>`).join('');
+}
+function waLink(text){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(text)}
+function calc(){
+  let once=0,month=0,lines=[];
+  CATS.forEach(c=>c[1].forEach(it=>{if(it.on){
+    if(it[5]==='m')month+=it[2];else once+=it[2];
+    lines.push('• '+it[0]+' — от '+fmt(it[2])+(it[5]==='m'?' / мес':it[5]==='u'?' / шт':''));
+  }}));
+  const rush=$('#rush').checked; if(rush)once=Math.round(once*1.3);
+  const n=lines.length;
+  $('#total').textContent=n?('от '+fmt(once)+(month?' + '+fmt(month)+' / мес':'')):'0 ₸';
+  $('#hint').textContent=n?('Выбрано услуг: '+n+(rush?' · срочно':'')):'Отметьте услуги в списке, сумма посчитается сама';
+  $('#clr').hidden=!n;
+  $('#send').textContent=n?'Отправить расчёт':'Написать в WhatsApp';
+  $('#send').href=waLink(n?('Здравствуйте! Меня интересует:\n'+lines.join('\n')+(rush?'\nСрочно (+30%)':'')+'\n\nИтого: от '+fmt(once)+(month?' + '+fmt(month)+' / мес':'')):'Здравствуйте! Хочу обсудить проект.');
+}
+$('#list').addEventListener('change',e=>{const t=e.target;if(t.dataset.c){CATS[t.dataset.c][1][t.dataset.i].on=t.checked;calc()}});
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;filter=+b.dataset.f;drawChips();drawList()});
+$('#rush').addEventListener('change',calc);
+$('#clr').addEventListener('click',()=>{CATS.forEach(c=>c[1].forEach(it=>it.on=false));$('#rush').checked=false;drawList();calc()});
+
+$('#packs').innerHTML=PACKS.map(p=>`<div class="pack${p[5]?' best':''}">${p[5]?'<span class="badge">Берут чаще всего</span>':''}
+  <h3>${p[0]}</h3><p class="for">${p[1]}</p><ul>${p[2].map(x=>'<li>'+x+'</li>').join('')}</ul>
+  <div class="price num"><s>${fmt(p[3])}</s>${fmt(p[4])}</div>
+  <a class="btn" target="_blank" rel="noopener" href="${waLink('Здравствуйте! Интересует пакет «'+p[0]+'» за '+fmt(p[4])+'.')}">Хочу этот пакет</a></div>`).join('');
+
+$('#works').innerHTML=WORKS.map(g=>`<h3>${g[0]}</h3>`+g[1].map(w=>
+  `<a class="work" href="${w[2]}" target="_blank" rel="noopener"><b>${esc(w[0])}</b><i>Открыть →</i><span>${esc(w[1])}</span></a>`).join('')).join('');
+
+drawChips();drawList();calc();
+</script>
+</body>
+</html>
